@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Game Rắn Săn Mồi</title>
+	<meta charset="utf-8">
+	<style>
+		canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 650px;
+    height: 450px;
+	}
+	h1{
+	text-align: center;
+	}
+	div{
+		text-align: center;
+	}
+	
+	</style>
+
+</head>
+<body>
+	<h1>Game Rắn Săn Mồi</h1>
+	<div id="score">Your Score: </div><hr>
+	<canvas id="myCanvas" style="border:1px solid #000000;">
+</canvas>
+</body>
+</html>
+<script>
+	var canvas=document.getElementById("myCanvas");
+	var ctx=canvas.getContext("2d")
+	var grid=10;
+	var snake={
+		x:200,
+		y:200,
+		dx:grid,
+		dy:0,
+		cells:[],
+		maxCells:3,
+		speed:100,
+	}
+	var apple={
+		x:100,
+		y:100,
+		score:0,
+	}
+	function randomInt(min, max){
+		return Math.floor(Math.random()*(max-min))+min;
+	}
+	function loop(){
+		setTimeout(loop,snake.speed);
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		snake.x+=snake.dx;
+		snake.y+=snake.dy;
+		//check đụng vào tường
+		if(snake.x<0){
+			snake.x=canvas.width-grid;
+		}
+		else if(snake.x>=canvas.width){
+			snake.x=0;
+		}
+		if (snake.y < 0) {
+  			snake.y = canvas.height - grid;
+  		}
+  		else if (snake.y >= canvas.height) {
+  			snake.y = 0;
+		}
+		snake.cells.unshift({x:snake.x, y:snake.y});
+		if (snake.cells.length > snake.maxCells) {
+		snake.cells.pop();
+		}
+		ctx.fillStyle = 'black';
+		ctx.fillRect(apple.x, apple.y, grid-1, grid-1);
+		ctx.fillStyle = 'green';
+		snake.cells.forEach(function(cell, index) {
+		ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
+		//ăn apple
+		if (cell.x === apple.x && cell.y === apple.y){
+		snake.maxCells++;
+		apple.score++
+		snake.speed-=5;
+		document.getElementById("score").innerHTML="Your Score: "+apple.score;
+		apple.x = randomInt(0, 15) * grid;
+		apple.y = randomInt(0, 15) * grid;
+
+		}
+		//va cham khi dung duoi rs gamme
+		for (var i = index + 1; i < snake.cells.length; i++) {
+	 	if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y){
+	 		alert("Game Over")
+	 		snake.x = 160;
+	 		snake.y = 160;
+	 		snake.cells = [];
+	 		snake.maxCells = 3;
+	 		snake.dx = grid;
+	 		snake.dy = 0;
+			apple.x = randomInt(0, 15) * grid;
+			apple.y = randomInt(0, 15) * grid;
+			snake.speed=100;
+			apple.score=0;
+			document.getElementById("score").innerHTML="Your Score: ";
+		}
+		}
+		});
+	}
+	document.addEventListener('keydown', function(e) {
+
+  // lọc sự kiện keydown để rắn không di ngược lại
+
+  if (e.which === 37 && snake.dx === 0) {
+
+    snake.dx = -grid;
+
+    snake.dy = 0;
+
+  }
+
+  else if (e.which === 38 && snake.dy === 0) {
+
+    snake.dy = -grid;
+
+    snake.dx = 0;
+
+  }
+
+  else if (e.which === 39 && snake.dx === 0) {
+
+    snake.dx = grid;
+
+    snake.dy = 0;
+
+  }
+
+  else if (e.which === 40 && snake.dy === 0) {
+
+    snake.dy = grid;
+
+    snake.dx = 0;
+}
+
+});
+loop();
+</script>

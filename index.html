@@ -4,6 +4,9 @@
 	<title>Game Rắn Săn Mồi</title>
 	<meta charset="utf-8">
 	<style>
+		body {
+	background-image: url("image/background.jpg");
+} 
 		canvas {
     padding-left: 0;
     padding-right: 0;
@@ -15,9 +18,11 @@
 	}
 	h1{
 	text-align: center;
+	color: #003399;
 	}
 	div{
 		text-align: center;
+		color: #003399;
 	}
 	
 	</style>
@@ -73,7 +78,7 @@
 		if (snake.cells.length > snake.maxCells) {
 		snake.cells.pop();
 		}
-		ctx.fillStyle = 'black';
+		ctx.fillStyle = 'red';
 		ctx.fillRect(apple.x, apple.y, grid-1, grid-1);
 		ctx.fillStyle = 'green';
 		snake.cells.forEach(function(cell, index) {
